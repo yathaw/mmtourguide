@@ -64,5 +64,7 @@ class CreateGuidesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('guides');
+        Schema::dropIfExists('guide_place');
+        Schema::dropIfExists('guide_language');
     }
 }

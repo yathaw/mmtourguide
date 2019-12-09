@@ -29,6 +29,7 @@ class HomeController extends Controller
         $search = $request->place;
 
         $searchlanguages = $request->language;
+        // dd($searchlanguages);
 
         
         $guides=array();
@@ -85,9 +86,9 @@ class HomeController extends Controller
             $place = $request->place;
             $languages = $request->language;
 
-            $guides = Guide::whereHas('guide_place', function(Builder $query) use ($place){
+            $guides = Guide::whereHas('places', function(Builder $query) use ($place){
                 $query->where('place_id', $place);
-            })->whereHas('guide_language', function(Builder $query) use ($languages){
+            })->whereHas('languages', function(Builder $query) use ($languages){
                 $query->whereIn('language_id', $languages);
             })->get();
             dd($guides);
