@@ -21,7 +21,6 @@ class CreateBookingsTable extends Migration
 
             //tourist
             $table->unsignedBigInteger('tourist_id');
-            $table->foreign('tourist_id')->references('id')->on('tourists');
 
             $table->timestamps();
         });

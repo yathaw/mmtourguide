@@ -21,7 +21,6 @@ class CreatePlacesTable extends Migration
 
             //region
             $table->unsignedBigInteger('region_id');
-            $table->foreign('region_id')->references('id')->on('regions');
 
             $table->timestamps();
         });

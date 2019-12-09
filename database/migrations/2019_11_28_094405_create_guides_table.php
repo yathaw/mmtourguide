@@ -34,12 +34,24 @@ class CreateGuidesTable extends Migration
 
             //user
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
 
             //division
             $table->unsignedBigInteger('division_id');
-            $table->foreign('division_id')->references('id')->on('divisions');
 
+            $table->timestamps();
+        });
+
+        Schema::create('guide_place', function(Blueprint $table){
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('guide_id');
+            $table->unsignedBigInteger('place_id');
+            $table->timestamps();
+        });
+
+        Schema::create('guide_language', function(Blueprint $table){
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('guide_id');
+            $table->unsignedBigInteger('language_id');
             $table->timestamps();
         });
     }

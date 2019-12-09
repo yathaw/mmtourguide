@@ -8,6 +8,8 @@ use App\Division;
 use App\Region;
 use App\Place;
 use Illuminate\Support\Facades\DB;
+use App\Guide;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class HomeController extends Controller
@@ -79,6 +81,17 @@ class HomeController extends Controller
 
                     ->orderBy('users.name', 'asc')
                     ->first();
+
+            $place = $request->place;
+            $languages = $request->language;
+
+            $guides = Guide::whereHas('guide_place', function(Builder $query) use ($place){
+                $query->where('place_id', $place);
+            })->whereHas('guide_language', function(Builder $query) use ($languages){
+                $query->whereIn('language_id', $languages);
+            })->get();
+            dd($guides);
+
             if ($searchresult != null) 
             {
                 array_push($guides, $searchresult);

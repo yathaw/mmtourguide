@@ -30,11 +30,9 @@ class CreateTouristsTable extends Migration
 
             //country
             $table->unsignedBigInteger('country_id');
-            $table->foreign('country_id')->references('id')->on('countries');
 
             //user
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });

@@ -22,11 +22,9 @@ class CreateBookingdetailsTable extends Migration
 
             //guide
             $table->unsignedBigInteger('guide_id');
-            $table->foreign('guide_id')->references('id')->on('guides');
 
             //booking
             $table->unsignedBigInteger('booking_id');
-            $table->foreign('booking_id')->references('id')->on('bookings');
             $table->timestamps();
         });
     }
