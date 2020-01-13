@@ -18,11 +18,9 @@ class CreateGuideLanguageTable extends Migration
             
             //guide
             $table->unsignedBigInteger('guide_id');
-            $table->foreign('guide_id')->references('id')->on('guides');
 
             //language
             $table->unsignedBigInteger('language_id');
-            $table->foreign('language_id')->references('id')->on('languages');
 
             $table->timestamps();
         });

@@ -1,0 +1,47 @@
+		div.stars {
+  display: inline-block;
+}
+
+input.star { display: none; }
+
+label.star {
+  float: right;
+  padding: 10px;
+  font-size: 20px;
+  color: #444;
+  transition: all .2s;
+}
+
+input.star:checked ~ label.star:before {
+  color: #FBC02D;
+  transition: all .25s;
+  font-family: "FontAwesome"; 
+  font-weight: 900; 
+  content: "\f005";
+}
+
+input.star-5:checked ~ label.star:before {
+  color: #e74c3c;
+  text-shadow: 0 0 5px #7f8c8d;
+}
+
+input.star-1:checked ~ label.star:before { color: #FBC02D; }
+
+label.star:hover { transform: rotate(-15deg) scale(1.3); }
+
+label.star:before {
+  font-family: "FontAwesome"; 
+  font-weight: 900; 
+  content: "\f005";
+}
+
+
+.horline > li:not(:last-child):after {
+    content: " |";
+}
+.horline > li {
+  font-weight: bold;
+  color: #ff7e1a;
+
+}
+/** end rating **/

@@ -23,6 +23,11 @@
 <!-- select2 -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 
+{{-- Date Picker --}}
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+
 <!-- select2-bootstrap4-theme -->
 <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"> <!-- for live demo page -->
 
@@ -44,6 +49,8 @@
 
 
 @endif
+
+@yield('style')
 
 </head>
 <body>
@@ -75,6 +82,9 @@
 										<a href="{{ asset('howitworks') }}">How It Works</a>
 									</li>
 
+                        			@guest
+
+
 									<li class="{{ Request::segment(1) === 'login' ? 'active' : '' }} ">
 										<a href="{{ route('login') }}"> Login </a>
 									</li>
@@ -83,14 +93,43 @@
 										<a href="{{ route('register') }}"> Register </a>
 									</li>
 
+                       				@else
+
+                       				<div class="dropdown">
+										<button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-color: transparent; font-family: 'Oswald', sans-serif">
+									    	{{ Auth::user()->name  }}
+									  	</button>
+									  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									    	<a class="dropdown-item" href="{{ route('profile') }}">
+									    		View Profile
+									    	</a>
+									    	
+									    	<a class="dropdown-item" href="#">
+									    		Booking History
+									    	</a>
+
+									    	
+
+									    	<div class="dropdown-divider"></div>
+									    	<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item"> Logout 
+											</a>
+											<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+				                                @csrf
+				                            </form>
+									  	</div>
+									</div>
+
+                       				@endif
+
+
 								</ul>
 							</nav>
-							<div class="header_phone ml-auto">
+							{{-- <div class="header_phone ml-auto">
 								<a href=""> 
 									<img src="{{ ('logo.png') }}" class="img-fluid" style="width: 30px; height: 30px;">
 									<span></span>
 								</a>
-							</div>
+							</div> --}}
 
 							<!-- Hamburger -->
 
@@ -285,7 +324,7 @@
 
 	@yield('content')
 
-	@if(Request::segment(1) === 'login' || Request::segment(1) === 'register')
+	@if(Request::segment(1) === 'login' || Request::segment(1) === 'register' || Request::segment(1) === 'search' || Request::segment(1) === 'book' || Request::segment(1) === 'appointment' || Request::segment(1) === 'guideprofile' || Request::segment(1) === 'profile' )
 		
 		<footer class="footer">
 		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{{ asset('frontend/images/footer_1.jpg') }}" data-speed="0.8"></div>
@@ -378,6 +417,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 {{-- SELECT2 --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+
+{{-- Date Picker --}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+{{-- localstorage --}}
+<script type="text/javascript" src="{{ asset('localstorage.js') }}"></script>
 
 
 @if(Request::segment(1) === 'login' || Request::segment(1) === 'register')

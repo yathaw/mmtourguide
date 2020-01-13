@@ -46,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
                     ->orderBy('regions.name', 'asc')
                     ->get();
 
+
         $languages = Language::all();
 
 

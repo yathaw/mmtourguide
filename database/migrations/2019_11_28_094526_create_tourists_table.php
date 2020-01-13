@@ -16,6 +16,8 @@ class CreateTouristsTable extends Migration
         Schema::create('tourists', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('gender');
+            $table->string('phone');
+            $table->text('address');
             $table->string('image');
             $table->string('cardtype');
 
@@ -30,11 +32,9 @@ class CreateTouristsTable extends Migration
 
             //country
             $table->unsignedBigInteger('country_id');
-            $table->foreign('country_id')->references('id')->on('countries');
 
             //user
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });

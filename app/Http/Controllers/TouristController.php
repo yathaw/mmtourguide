@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Tourist;
+use app\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TouristController extends Controller
 {
@@ -13,7 +17,15 @@ class TouristController extends Controller
      */
     public function index()
     {
-        //
+        $authid = Auth::id();
+
+        $user = User::find($authid);
+
+        $userid = $user->id;
+
+        $tourist = Tourist::where('user_id',$userid)->first();
+        
+        return view('profile', compact('tourist'));
     }
 
     /**

@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Guide;
+use App\Tourist;
 use Mail;
 use Carbon\Carbon;
+use App\Bookingdetail;
 
 use Illuminate\Support\Facades\Auth;
-
+use Redirect,Response;
+use Illuminate\Support\Facades\DB;
 
 
 class GuideController extends Controller
@@ -26,6 +29,110 @@ class GuideController extends Controller
         $licenses = json_decode($guide->licensecertificate);
 
     	return view('guide/profile',compact('guide', 'licenses'));
+    }
+
+
+    public function calendar()
+    {
+ 
+            $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
+            $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
+
+            $id = Auth::id();
+            $guide = Guide::where('user_id',$id)->first();
+            $guideid = $guide->id;
+
+            $datas = DB::table('bookingdetails')
+                    ->select('bookingdetails.id as id', 'places.name as name', 'hour_startdate as hourstartdate', 'daily_startdate as startdate', 'daily_enddate as enddate', 'arrival_time as arrival_time', 'departure_time as departure_time')
+                    ->where('guide_id',$guideid)
+                    ->where('status','Confirm')
+                    
+                    ->join('places', 'bookingdetails.place_id', '=', 'places.id')
+                    ->get();
+
+
+        return view('guide/calendar',compact('datas'));
+    }
+
+    public function getTripevent()
+    {
+        $id = Auth::id();
+
+        $guide = Guide::where('user_id',$id)->first();
+
+        $guideid = $guide->id;
+
+        $bookingdetails = Bookingdetail::where('guide_id',$guideid)->where('status','Confirm')->get();
+
+        return json_encode($bookingdetails);
+    }
+
+    public function booking()
+    {
+        $id = Auth::id();
+
+        $guide = Guide::where('user_id',$id)->first();
+
+        $guideid = $guide->id;
+
+
+        $bookingdetails = Bookingdetail::where('guide_id',$guideid)->get();
+
+        return view('backend/guide/bookinglist',compact('bookingdetails'));
+
+    }
+
+    public function bookingdetail($id)
+    {
+        $bookingdetail = Bookingdetail::find($id);
+
+        return view('backend/guide/bookingdetail',compact('bookingdetail'));
+
+    }
+
+    public function bookingconfirm($id)
+    {
+        $carbon = Carbon::now();
+        $today = $carbon->format('Y-m-d');
+
+        $status = "Confirm";
+
+        $bookingdetail = Bookingdetail::find($id);
+
+        // Tourist Email
+        $touristemail = $bookingdetail->booking->tourist->user->email;
+
+        // Tourist Name
+        $touristname = $bookingdetail->booking->tourist->user->name;
+        
+
+        // Update Status in Bookingdetail
+        $bookingdetail->hour_startdate = $bookingdetail->hour_startdate;
+        $bookingdetail->numberofhours = $bookingdetail->numberofhours;
+        $bookingdetail->daily_startdate = $bookingdetail->daily_startdate;
+        $bookingdetail->daily_enddate = $bookingdetail->daily_enddate;
+        $bookingdetail->tour_day = $bookingdetail->tour_day;
+        $bookingdetail->arrival_time = $bookingdetail->arrival_time;
+        $bookingdetail->departure_time = $bookingdetail->departure_time;
+        $bookingdetail->numberofadult = $bookingdetail->numberofadult;
+        $bookingdetail->numberofchild = $bookingdetail->numberofchild;
+        $bookingdetail->requirement = $bookingdetail->requirement;
+        $bookingdetail->cost = $bookingdetail->cost;
+        $bookingdetail->status = $status;
+        $bookingdetail->confirmdate = $today;
+        $bookingdetail->finishdate = $bookingdetail->finishdate;
+        $bookingdetail->guide_id = $bookingdetail->guide_id;
+        $bookingdetail->place_id = $bookingdetail->place_id;
+        $bookingdetail->booking_id = $bookingdetail->booking_id;
+        $bookingdetail->created_at = $bookingdetail->created_at;
+        $bookingdetail->updated_at = $bookingdetail->updated_at;
+        $bookingdetail->save();
+
+
+
+        return redirect('tourguide/booking')->with("success_flashmsg", 'Your Booking is confirmed.'); 
+
+
     }
 
     public function pricing()
@@ -76,82 +183,9 @@ class GuideController extends Controller
         return view('guide/edit', compact('guide', 'licenses'));
     }
 
-    public function new()
-    {
-        $news = Guide::where('status',0)->get();
+    
 
-        return view('backend/guide/newlist',compact('news'));
-    }
-
-    public function register()
-    {
-        $registers = Guide::where('status',1)->get();
-
-        return view('backend/guide/registerlist',compact('registers'));
-    }
-
-    public function reject()
-    {
-        $rejects = Guide::where('status',2)->get();
-
-        return view('backend/guide/rejectlist',compact('rejects'));
-    }
-
-    public function confirm($id)
-    {
-        $carbon = Carbon::now();
-        $today = $carbon->format('Y-m-d');
-
-    	$guide = Guide::find($id);
-    	$guide_userid = $guide->user->id;
-
-    	$user = User::find($guide_userid);
-
-    	$user->assignRole('guide');
-
-        $guidenumber = 'MM'.rand(11111,99999);
-
-        $guide->license = $guide->license;
-        $guide->licensecertificate = $guide->licensecertificate;
-        $guide->phone = $guide->phone;
-        $guide->address = $guide->address;
-        $guide->gender = $guide->gender;
-        $guide->profile = $guide->profile;
-        $guide->cv = $guide->cv;
-        $guide->approveddate = $today;
-        $guide->bio = $guide->bio;
-        $guide->hourrate = $guide->hourrate;
-        $guide->dailyrate = $guide->dailyrate;
-        $guide->guidenumber = $guidenumber;
-        $guide->status = 1;
-        $guide->user_id = $guide->user_id;
-        $guide->division_id = $guide->division_id;
-        $guide->save();
-
-  //   	$email = $user->email;
-  //   	$subject = 'Confirm Your Email To Our Guide Member';
-  //   	$from = "myanmaritbootcamp@gmail.com";
-  //   	// dd($useremail);
-
-  //       $username = $user->name;
-
-  //   	$data = array(
-	 //        'name' => $username,
-	 //        'email' => $email
-	 //    );
-
-		// Mail::send('mail.guide_confirm', compact('data'), function ($message) use ($email,$from,$subject){
-
-	 //        $message->from($from, 'MM Tour Guide');
-
-	 //        $message->to($email)->subject($subject);
-
-	 //    });
-
-        return redirect('admin/guide/register')->with("success_flashmsg", "New Guide is ADDED in your data");
-		
-    	// dd($user); 
-    }
+    
 
     public function show($id)
     {

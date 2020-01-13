@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\User;
+use Illuminate\Support\Facades\DB;
+
 
 class UsersTableSeeder extends Seeder
 {
@@ -27,6 +29,32 @@ class UsersTableSeeder extends Seeder
 	            'updated_at' => now()
 	        ]);
     	$admin->assignRole('admin');
+
+        $faker = Faker\Factory::create();
+        
+        for($i = 0; $i < 16; $i++) 
+        {
+            $tourguide = User::create([
+                'name' => $faker->name,
+                'email' => $faker->email,
+                'password' =>Hash::make('123456789'),
+                'registerdate'  => $today,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            $tourguide->assignRole('guide');
+
+        }
+
+        $tourist = User::create([
+                'name' => 'Ya Thaw Myat Noe',
+                'email' => 'yathawmyatnoe007@gmail.com',
+                'password' =>Hash::make('123456789'),
+                'registerdate'  => $today,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        $tourist->assignRole('tourist');
 
     }
 }

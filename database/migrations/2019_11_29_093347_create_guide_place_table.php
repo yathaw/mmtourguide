@@ -18,11 +18,9 @@ class CreateGuidePlaceTable extends Migration
             
             //guide
             $table->unsignedBigInteger('guide_id');
-            $table->foreign('guide_id')->references('id')->on('guides');
 
             //place
             $table->unsignedBigInteger('place_id');
-            $table->foreign('place_id')->references('id')->on('places');
 
             $table->timestamps();
         });

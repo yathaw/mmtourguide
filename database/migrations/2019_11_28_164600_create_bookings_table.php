@@ -16,12 +16,16 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('tokenno');
-            $table->string('nop');
-            $table->text('note');
+            $table->date('bookingdate');
+            $table->date('confirmdate');
+            $table->date('finishdate');
+            $table->text('invoicepdf');
+            $table->string('total');
+            $table->string('totalguide');
+            $table->string('status');
 
             //tourist
             $table->unsignedBigInteger('tourist_id');
-            $table->foreign('tourist_id')->references('id')->on('tourists');
 
             $table->timestamps();
         });

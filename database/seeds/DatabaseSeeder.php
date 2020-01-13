@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(PlacesTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(GuidesTableSeeder::class);
+        $this->call(TouristsTableSeeder::class);
+        
         
     }
 }

@@ -10,4 +10,9 @@ class DashboardController extends Controller
     {
     	return view("backend/dashboard");
     }
+
+    public function guide()
+    {
+    	return view("backend/dashboard");
+    }
 }

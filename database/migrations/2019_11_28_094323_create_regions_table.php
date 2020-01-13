@@ -19,7 +19,6 @@ class CreateRegionsTable extends Migration
 
             //division
             $table->unsignedBigInteger('division_id');
-            $table->foreign('division_id')->references('id')->on('divisions');
 
             $table->timestamps();
         });

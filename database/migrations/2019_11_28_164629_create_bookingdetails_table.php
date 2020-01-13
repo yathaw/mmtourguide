@@ -15,18 +15,35 @@ class CreateBookingdetailsTable extends Migration
     {
         Schema::create('bookingdetails', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('tour_date');
+            $table->date('hour_startdate');
+            $table->string('numberofhours');
+
+            $table->date('daily_startdate');
+            $table->date('daily_enddate');
             $table->integer('tour_day');
-            $table->time('tour_time');
+
+            $table->string('arrival_time');
+            $table->string('departure_time');
+
+            $table->string('numberofadult');
+            $table->string('numberofchild');
+
+            $table->text('requirement');
+            $table->text('cost');
             $table->string('status');
+
+            $table->date('confirmdate');
+            $table->date('finishdate');
+
 
             //guide
             $table->unsignedBigInteger('guide_id');
-            $table->foreign('guide_id')->references('id')->on('guides');
+
+            //place
+            $table->unsignedBigInteger('place_id');
 
             //booking
             $table->unsignedBigInteger('booking_id');
-            $table->foreign('booking_id')->references('id')->on('bookings');
             $table->timestamps();
         });
     }

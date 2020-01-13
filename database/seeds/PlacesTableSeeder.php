@@ -445,9 +445,37 @@ class PlacesTableSeeder extends Seeder
 
             // 40
             DB::table('places')->insert([
-                'name'       => 'Kanbawzathadi Golden Palace',
-                'photo'      => '/storage/photo/places/kanbawzathadi.jpg',
-                'description'    => 'Kanbawzathadi Golden Palace in Bago is a reconstruction of the original Royal palace from the second half of the 16th century. The very ornate golden palace gives a good impression of the splendor and wealth of the second Burmese empire. It was rebuilt following the original design, based on knowledge gained from excavations and the original drawings of the building. The huge palace consisted of 76 apartments and halls. The reconstructed palace does not contain much of the original furniture and personal items used by the Royals, as most of it was lost when the palace was looted and destroyed in 1599. There are several reproductions on display, like a replica of the King’s golden coach, decorated with two peacocks and a Pyatthat style roof.',
+                'name'       => 'Shwethalyaung Pagoda',
+                'photo'      => '/storage/photo/places/67920049.jpg',
+                'description'    => 'The Shwethalyaung Buddha is one of the largest reclining Buddha images in Burma. It is housed in the Shwethalyaung Paya in Bago, an important pilgrimage site for Buddhists who come here to pay homage to the Buddha.
+                The image measuring 55 meters long and 16 meters high depicts the Buddha just before death and entering into Nirvana. A similar reclining Buddha, the Chauk Htat Gyi Buddha which is another 10 meters longer can be found in nearby Yangon.
+
+                In front of the Shwethalyaung pagoda is another very large reclining Buddha, the Mya Thar Lyaung, a more recent image out in the open, not sheltered by a temple structure.
+
+                Large hall with murals leading to the Shwethalyaung Buddha
+                Entrance to the tazaung housing the Buddha is through a large hall with white pillars. Its walls contain murals depicting several Buddhist stories. At the end of the hall, a stairway leads to the pavilion sheltering the Shwethalyaung Buddha image. On the balustrades is a mythological Naga snake, an animal believed to protect Buddhism, since it was a snake that protected the Buddha under its hood against heavy rainfall during meditation.
+
+                The 55 meter long image
+                The reclining Buddha image is housed in an iron pavilion called tazaung with Italian marble on the floor. On the walls are murals depicting scenes from the Jataka tales, the stories that tell about the previous lives of the Buddha.
+
+                On a large pedestal rests a white image of the Buddha with a serene smile wearing a gilded robe, the head resting on a “pillow” of caskets inlaid with mosaics. The soles of the feet are decorated with images representing the 108 lakshanas or auspicious characteristics of the Buddha. Around the Buddha are several guardian Nats, spirits that have been worshipped in Burma for many centuries.
+
+                History of the Shwethalyaung Buddha
+                The Shwethalyaung Buddha image was built in 994 by the Mon King Mingadeipka. After the image had fallen into disrepair, it was renovated by King Dhammazedi in the 15th century. After the destruction of Bago that came with the Mon revolt against the Burmese in 1757 the image was forgotten and was overgrown by jungle.
+
+                It was rediscovered by chance in the colonial era when the British built a railway between Yangon and Bago in 1881. During clearing works the Buddha image was discovered under a mound grown over with thick jungle vegetation. The image was restored and an iron pavilion (tazaung) was built over the image to protect it from the elements. Over the following decades several other buildings were added to the temple complex.
+
+                Murals depicting the story of the Shwethalyaung Buddha
+                On the back of the pedestal where the image is resting on is a series of large mural paintings that tell the story of the origin of the image.
+
+                One day a Prince, the son of King Mingadeipka, ventured into a forest. In a small nearby village the Prince meets a Mon woman, who is a follower of the Buddha. The Prince marries the woman and takes her back to the King’s palace.
+
+                Once in the palace, the Mon woman does not bow to the heathen statues of the King, but to an image of the Buddha instead. Angered by this, the King orders the woman to be killed as a sacrifice to his Gods.
+
+                In front of the heathen statue worshipped by the King, the woman prays to the three jewels of Buddhism, namely the Buddha, the Buddhist teachings and the Buddhist community. Right this moment, the heathen statue of the King breaks into pieces. The King, stricken with fear, realizes he has been worshipping the wrong God and orders a large statue of the Buddha to be erected.
+
+                How to get to Shwethalyaung Buddha
+                The Shwethalyaung pagoda is found West of the main road connecting Bago with Yangon (National Highway NH1), about 1 kilometer from the Bago railway station. To get there from the downtown area, hire a private taxi from hotel or travel agent. A ride by trishaw should cost around 1,000 Kyat.',
                 'region_id'      => 50,
                 'created_at' => now(),
                 'updated_at' => now()

@@ -11,12 +11,17 @@ use App\Place;
 use App\Division;
 use App\Country;
 use App\Tourist;
+use Mail;
+
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
 
 
 
@@ -99,7 +104,7 @@ class AuthController extends Controller
 	            'email' => $email,
 	            'password' => $password,
 	        ]);
-    		$user->assignRole('tourist');
+    		// $user->assignRole('tourist');
 
 		    // --------------------------------
 
@@ -173,9 +178,32 @@ class AuthController extends Controller
             $tourist->passportcard = $multiple_path;
             $tourist->image = $image_path;
 
-            $tourist->save();   
+            $tourist->save();  
+
+            $email = $user->email;
+            $subject = 'Confirm Your Email To Our Tourist Member';
+            $from = "myanmaritbootcamp@gmail.com";
+
+            $username = $user->name;
+            $userid = $user->id;
+            $touristid = $tourist->id;
+
+            $data = array(
+                'name' => $username,
+                'email' => $email,
+                'userid' => $userid,
+                'toruistid' => $touristid
+            );
+
+            Mail::send('mail.tourist_confirm', compact('data'), function ($message) use ($email,$from,$subject){
+
+                $message->from($from, 'MM Tour Guide');
+
+                $message->to($email)->subject($subject);
+
+            }); 
             
-            return redirect('login')->with("success_flashmsg", "Register successfully. Please Login....!");         
+            return redirect('register/success')->with("mail", $email); 
 
         }
 
@@ -185,6 +213,41 @@ class AuthController extends Controller
         }
 
 
+    }
+
+    public function tourism_success()
+    {
+
+        return view('auth/tourism_registersuccess');
+    }
+
+    public function tourism_confirmlogin($id)
+    {
+        $tourist = Tourist::find($id);
+
+        $userid = $tourist->user_id;
+
+        $user = User::find($userid);
+
+        $user->assignRole('tourist');
+
+
+        $tourist->gender = $tourist->gender;
+        $tourist->image = $tourist->image;
+        $tourist->cardtype = $tourist->cardtype;
+        $tourist->passport = $tourist->passport;
+        $tourist->passportcard = $tourist->passportcard;
+        $tourist->nationality = $tourist->nationality;
+        $tourist->dob = $tourist->dob;
+        $tourist->doi = $tourist->doi;
+        $tourist->doe = $tourist->doe;
+        $tourist->status = 1;
+        $tourist->country_id = $tourist->country_id;
+        $tourist->user_id = $tourist->user_id;
+        $tourist->save();
+
+
+        return redirect('login');
     }
 
     public function guide_register(Request $request)
@@ -329,7 +392,7 @@ class AuthController extends Controller
 	        	$guide->places()->attach($places);
 	       	
 
-	        return view('auth/registersuccess');
+	        return view('auth/guide_registersuccess');
 
         }
         else

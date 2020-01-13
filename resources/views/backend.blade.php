@@ -50,13 +50,41 @@
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
+
+                    @hasanyrole('admin')
+
                     <li>
                         <a href="{{ asset('admin/dashboard') }}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                     </li>
+
+                    <li class="{{ Request::segment(2) === 'booking' ? 'active' : '' }}">
+                        <a href="{{ asset('admin/booking') }}"> 
+                            <i class="menu-icon fa fa-paper-plane"></i>
+                            Booking Request 
+                        </a>
+                    </li>
+
+                    @endrole;
+                    
+                    @hasanyrole('guide')
+                    <li>
+                        <a href="{{ asset('tourguide/dashboard') }}"> 
+                            <i class="menu-icon fa fa-dashboard"></i>
+                            Dashboard 
+                        </a>
+                    </li>
+
+                    @endrole;
+
                     <h3 class="menu-title"> Main </h3><!-- /.menu-title -->
+                    
+                    @hasanyrole('admin')
 
                     <li class="menu-item-has-children dropdown {{ Request::segment(2) === 'guide' ? 'active' : '' }}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-group"></i> Tour Guide </a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                            <i class="menu-icon fa fa-group"></i> 
+                            Tour Guide 
+                        </a>
                         <ul class="sub-menu children dropdown-menu">
                             <li>
                                 <i class="fa fa-long-arrow-right"></i>
@@ -76,7 +104,10 @@
                     </li>
 
                     <li class="menu-item-has-children dropdown {{ Request::segment(2) === 'tourist' ? 'active' : '' }}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-suitcase"></i> Tourist </a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                            <i class="menu-icon fa fa-suitcase"></i> 
+                            Tourist 
+                        </a>
                         <ul class="sub-menu children dropdown-menu">
                             <li>
                                 <i class="fa fa-long-arrow-right"></i>
@@ -97,7 +128,10 @@
                     </li>
 
                     <li class="menu-item-has-children dropdown {{ Request::segment(2) === 'place' ? 'active' : '' }} {{ Request::segment(2) === 'division' ? 'active' : '' }} {{ Request::segment(2) === 'region' ? 'active' : '' }}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-map-marker"></i> Place </a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                            <i class="menu-icon fa fa-map-marker"></i> 
+                            Place 
+                        </a>
                         <ul class="sub-menu children dropdown-menu">
                             <li>
                                 <i class="fa fa-long-arrow-right"></i>
@@ -117,12 +151,52 @@
                     </li>
 
                     <li class="{{ Request::segment(2) === 'language' ? 'active' : '' }}">
-                        <a href="{{ asset('admin/language') }}"> <i class="menu-icon fa fa-flag"></i> Language </a>
+                        <a href="{{ asset('admin/language') }}"> 
+                            <i class="menu-icon fa fa-flag"></i>
+                            Language 
+                        </a>
                     </li>
 
                     <li class="{{ Request::segment(2) === 'country' ? 'active' : '' }}">
-                        <a href="{{ asset('admin/country') }}"> <i class="menu-icon fa fa-globe"></i> Country </a>
+                        <a href="{{ asset('admin/country') }}"> 
+                            <i class="menu-icon fa fa-globe"></i>
+                            Country 
+                        </a>
                     </li>
+
+                    @endrole
+
+                    @hasanyrole('guide')
+
+                    <li class="{{ Request::segment(2) === 'calendar' ? 'active' : '' }}">
+                        <a href="{{ asset('tourguide/calendar') }}"> 
+                            <i class="menu-icon fa fa-calendar"></i>
+                            Calendar 
+                        </a>
+                    </li>
+
+                    <li class="{{ Request::segment(2) === 'booking' ? 'active' : '' }}">
+                        <a href="{{ asset('tourguide/booking') }}"> 
+                            <i class="menu-icon fa fa-paper-plane"></i>
+                            Booking Request 
+                        </a>
+                    </li>
+
+                    <li class="{{ Request::segment(2) === 'place' ? 'active' : '' }}">
+                        <a href="{{ asset('tourguide/place') }}"> 
+                            <i class="menu-icon fa fa-map-marker"></i>
+                            Place 
+                        </a>
+                    </li>
+
+                    <li class="{{ Request::segment(2) === 'report' ? 'active' : '' }}">
+                        <a href="{{ asset('tourguide/report') }}"> 
+                            <i class="menu-icon fa fa-bar-chart"></i>
+                            Report 
+                        </a>
+                    </li>
+
+                    @endrole
 
                     
                 </ul>
@@ -160,6 +234,8 @@
                             @if(Auth::user()->hasrole('admin'))
                             <img class="user-avatar rounded-circle" src="{{ asset('backend/images/admin.png') }}" alt="User Avatar">
                             @else
+                            <span class="mr-3 pt-5"> {{ Auth::user()->name }} </span>
+
                             <img class="user-avatar rounded-circle" src="{{ Auth::user()->guide->profile }}" alt="User Avatar">
                             @endif
                         </a>
@@ -249,7 +325,7 @@
         });
 
     </script>
-    @yield('script');
+    @yield('script')
 
 </body>
 

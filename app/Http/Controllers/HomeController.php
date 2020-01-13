@@ -7,7 +7,13 @@ use App\Language;
 use App\Division;
 use App\Region;
 use App\Place;
+use App\Guide;
+use App\Bookingdetail;
+use App\Rating;
+
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 
 class HomeController extends Controller
@@ -28,64 +34,14 @@ class HomeController extends Controller
 
         $searchlanguages = $request->language;
 
+        $place = $request->place;
+        $languages = $request->language;
         
-        $guides=array();
-
-        for ($i=0; $i < count($searchlanguages); $i++) 
-        { 
-            $language = $searchlanguages[$i];
-
-
-            $searchresult =   DB::table("guides")
-                    ->select(
-                            'users.id as user_id',
-                            'guides.id as guide_id',
-                            'users.name as guide_name',
-                            'users.email as guide_email',
-                            'guides.license as guide_license',
-                            'guides.licensecertificate as guide_licensecertificate',
-                            'guides.phone as guide_phone',
-                            'guides.address as guide_address',
-                            'guides.gender as guide_gender',
-                            'guides.profile as guide_profile',
-                            'guides.bio as guide_bio',
-                            'guides.hourrate as guide_hourrate',
-                            'guides.dailyrate as guide_dailyrate',
-                            'guides.guidenumber as guide_guidenumber',
-                            'regions.name as region_name',
-                            'divisions.name as division_name',
-                            'places.name as place_name',
-                            DB::raw('GROUP_CONCAT(languages.id) AS language_id'),
-                            DB::raw('GROUP_CONCAT(languages.name) AS language_name'),
-
-                        )
-                    ->join('users', 'guides.user_id', '=', 'users.id')
-                    ->join('divisions', 'guides.division_id', '=', 'divisions.id')
-                    ->join('regions', 'divisions.id', '=', 'regions.division_id')
-
-
-                    ->join('guide_place', 'guides.id', '=', 'guide_place.guide_id')
-                    ->join('places', 'guide_place.place_id', '=', 'places.id')
-
-                    ->join('guide_language', 'guides.id', '=', 'guide_language.guide_id')
-                    ->join('languages', 'guide_language.language_id', '=', 'languages.id')
-
-                    ->where('guide_place.place_id', 'LIKE', "%{$search}%")
-            
-                    ->where('guide_language.language_id', 'LIKE', "%{$language}%")
-                    ->groupBy('guide_language.language_id')
-                    ->groupBy('guide_language.guide_id')
-                    ->groupBy('guides.id')
-
-                    ->orderBy('users.name', 'asc')
-                    ->first();
-            if ($searchresult != null) 
-            {
-                array_push($guides, $searchresult);
-                
-            }
-
-        }
+        $guides = Guide::whereHas('places', function(Builder $query) use ($place){
+                $query->where('place_id', $place);
+            })->whereHas('languages', function(Builder $query) use ($languages){
+                $query->whereIn('language_id', $languages);
+            })->get();
 
         // dd($guides);
 
@@ -126,6 +82,91 @@ class HomeController extends Controller
         $response=array('name'=>$name,'id'=>$id);
         return response()->json($response,200);
         // echo json_encode($name, $id, 128);
+    }
+
+    public function guideprofile($id)
+    {
+        $guide = Guide::find($id);
+        $touristid = Auth::id();
+
+        // Adventurers
+        $adventurers = Bookingdetail::where('guide_id', $id)
+                    ->where('status', 'complete')
+                    ->groupBy('place_id')
+                    ->get();
+
+        // Rating
+        $rating = Rating::where('guide_id', $id)
+        ->where('tourist_id', $touristid)->first();
+
+        if ($rating) 
+        {
+            $star = $rating->star;  
+        }
+        else
+        {
+            $star = "";
+        }
+
+        // Rating Bar
+        
+        $star_5 = Rating::select('star')->where('guide_id', $id)->where('star','=',5)->sum('star');
+
+        $star_4 = Rating::select('star')->where('guide_id', $id)->where('star','=',4)->sum('star');
+
+        $star_3 = Rating::select('star')->where('guide_id', $id)->where('star','=',3)->sum('star');
+
+        $star_2 = Rating::select('star')->where('guide_id', $id)->where('star','=',2)->sum('star');
+
+        $star_1 = Rating::select('star')->where('guide_id', $id)->where('star','=',1)->sum('star');
+
+        $ratingBar = [
+            'star_1' => $star_1,
+            'star_2' => $star_2,
+            'star_3' => $star_3,
+            'star_4' => $star_4,
+            'star_5' => $star_5,
+        ];
+
+        return view('guideprofile',compact('guide', 'adventurers','star', 'ratingBar'));
+    }
+
+    public function rating()
+    {
+        $star = request('rating');
+        $guideid = request('guideid');
+
+        $touristid = Auth::id();
+
+        $alreadyRating = Rating::where('guide_id', $guideid)
+        ->where('tourist_id', $touristid)->first();
+
+
+        if ($alreadyRating) 
+        {
+            $ratingid = $alreadyRating->id;
+
+            $rating = Rating::find($ratingid);
+
+            $rating->star = $star;
+            $rating->guide_id = $rating->guide_id;
+            $rating->tourist_id = $rating->tourist_id;
+            $rating->save();
+        }
+
+        else
+        {
+            Rating::create([
+                'star'           => $star,
+                'guide_id'       => $guideid,
+                'tourist_id'     => $touristid,
+            ]);
+
+        }
+
+        
+
+        echo "SUCCESS";
     }
 
     /**

@@ -27,10 +27,9 @@ class Guide extends Model
     {
         return $this->belongsToMany('App\Place');
     }
-
-    public function guides()
-    {
-        return $this->hasMany('App\Guide');
-    }
     
+    public function rating()
+    {
+        return $this->hasMany('App\Rating');
+    }
 }

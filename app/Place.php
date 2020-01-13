@@ -19,5 +19,10 @@ class Place extends Model
                     ->withPivot('price')
                     ->withTimestamps();
     }
+
+    public function booking()
+    {
+        return $this->hasOne('App\Booking');
+    }
     
 }

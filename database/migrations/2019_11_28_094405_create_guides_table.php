@@ -34,11 +34,9 @@ class CreateGuidesTable extends Migration
 
             //user
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
 
             //division
             $table->unsignedBigInteger('division_id');
-            $table->foreign('division_id')->references('id')->on('divisions');
 
             $table->timestamps();
         });

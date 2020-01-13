@@ -32,58 +32,66 @@
 							<div class="card mb-3">
 								<div class="row no-gutters">
 								    <div class="col-md-4">
-								      	<img src="{{ $guide->guide_profile }}" class="card-img" alt="...">
+								      	<img src="{{ $guide->profile }}" class="card-img" alt="...">
 								    </div>
 								    <div class="col-md-8">
 								      	<div class="card-body">
 
 								        	<h5 class="card-title mb-3">
-								        		{{ $guide->guide_name }}
+								        		{{ $guide->user->name }}
 
 								        		<span class="float-right">
 								        			<p class="text-center">
 												@php
-													$languages_string = $guide->language_name;
-													$languages = explode(',', $languages_string);
-
-													$languagescount = count($languages)
+													$languages = $guide->languages;
 
 												@endphp
 
-												@for($i=0; $i<$languagescount; $i++ )
+												@foreach($languages as $language)
 												
-													<span class="badge badge-pill badge-dark"> {{ $languages[$i] }} </span>
-												@endfor
+													<span class="badge badge-pill badge-dark"> {{ $language->name }} </span>
+												@endforeach
 
 											</p>
 								        		</span>
 								        	</h5>
 
 								        	<p> <b> Hour Rate : </b> 
-								        		<span class="text-danger"> {{ $guide->guide_hourrate }} </span>
+								        		<span class="text-danger"> {{ $guide->hourrate }} </span>
 								        	</p>
 
 								        	<p> <b> Daily Rate : </b> 
-								        		<span class="text-danger"> {{ $guide->guide_dailyrate }} </span>
+								        		<span class="text-danger"> {{ $guide->dailyrate }} </span>
 								        	</p>
 
-								        	<a href="#" class="btn btn-outline-info btn-sm mt-2">
-										    	Guide Profile
-										    </a>
+								        	<div class="row">
+								        		<div class="col-4">
+								        			<a href="{{ URL::to('guideprofile', $guide->id) }}" class="btn btn-outline-info btn-sm mt-2">
+										    			Guide Profile
+										    		</a>
+								        		</div> 
+												
+												<div class="col-4 mt-2">
+													<form id="book-form" action="{{ route('book',$guide->id) }}" method="POST" style="">
+					                                    @csrf
+					                                    <input type="hidden" name="placeid" value="{{ $location->place_id }}">
+					                                    <input type="hidden" name="regionid" value="{{ $location->region_id }}">
 
-										    <a href="#" class="btn btn-outline-warning btn-sm mt-2">
-										    	Add Favourite
-										    </a>
+					                                    <input type="hidden" name="divisionid" value="{{ $location->division_id }}">
 
-										    <a href="javascript:void(0)" class="btn btn-outline-success btn-sm mt-2 bookbtn" 
-										    data-guideid ="{{ $guide->guide_id }}"
-										    data-placeid = "{{ $location->place_id }}"
-										    data-regionid = "{{ $location->region_id }}"
-										    data-divisionid = "{{ $location->division_id }}"
-										    >
-										    	Book Now
+					                                    <input type="submit" value="Book Now" class="btn btn-outline-success btn-sm">
 
-										    </a>
+					                                </form>
+												</div>
+
+								        	</div>
+
+								        	
+
+										    
+
+				                            
+
 								      	</div>
 								    </div>
 								</div>
@@ -127,15 +135,15 @@
               	}
             });
 
-            $.ajax({
-                type:'POST',
-                url:'book',
-                data:{guideid:guideid, guidename:guidename, placeid:placeid, placename:placename, regionid:regionid, regionname:regionname, divisionid:divisionid, divisionname:divisionname },
+            // $.ajax({
+            //     type:'POST',
+            //     url:'book',
+            //     data:{guideid:guideid, guidename:guidename, placeid:placeid, placename:placename, regionid:regionid, regionname:regionname, divisionid:divisionid, divisionname:divisionname },
                 // success:function(data)
                 // {
                 // 	window.location();
                 // }
-            });
+            //});
 
 
 

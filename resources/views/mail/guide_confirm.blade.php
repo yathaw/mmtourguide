@@ -9,11 +9,8 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col-2 d-inline"> 
+			<div class="col-12 d-inline"> 
 				<img src="{{$message->embed(public_path('logo.gif'))}}" class="img-fluid" style="width: 150px; height: 100px;"> 
-			</div>
-			<div class="col-10">
-				<h1 class="display-1"> MM Tour Guide </h1>
 			</div>
 		</div>
 

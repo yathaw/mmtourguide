@@ -19,11 +19,9 @@ class CreateRatingsTable extends Migration
 
             //guide
             $table->unsignedBigInteger('guide_id');
-            $table->foreign('guide_id')->references('id')->on('guides');
 
             //tourist
             $table->unsignedBigInteger('tourist_id');
-            $table->foreign('tourist_id')->references('id')->on('tourists');
 
             $table->timestamps();
         });
